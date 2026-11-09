@@ -145,6 +145,8 @@ document.getElementById("loadTrack")!.addEventListener("click", async () => {
         const notes = notesDiv ? notesDiv : "Add Comment"
         selectedComment.notes = notes; 
       }
+
+
     });
 
   if (listenerType === "vocal") {
@@ -172,6 +174,8 @@ document.getElementById("loadTrack")!.addEventListener("click", async () => {
       }
     });
   }
+
+
 });
 
 
@@ -397,7 +401,7 @@ function createComment(): void {
   
   //create the comment
   const newComment: comment = {
-    commentNumber: commentId,
+    commentnumber: commentId,
     starttime: currentTime, 
     lyrics: "Add Lyrics",
     translation: "Add Translation",
@@ -414,8 +418,8 @@ function createComment(): void {
   drawDivs(); 
 
   //set the new comment to the focus. 
-  if (commentMap.get(newComment.commentNumber)) {
-    onFocus(commentMap.get(newComment.commentNumber), "comment")
+  if (commentMap.get(newComment.commentnumber)) {
+    onFocus(commentMap.get(newComment.commentnumber), "comment")
   }; 
 
 }
@@ -442,9 +446,9 @@ function createKey(): void {
   
   //create the key
   const newKey: key = {
-    keyNumber: keyId,
+    keynumber: keyId,
     starttime: currentTime, 
-    text: "key"
+    keytext: "key"
   }
   
   //add the key to the array. 
@@ -456,8 +460,8 @@ function createKey(): void {
   drawDivs(); 
 
   //set the new key to the focus. 
-  if (keyMap.get(newKey.keyNumber)) {
-    onFocus(keyMap.get(newKey.keyNumber), "key")
+  if (keyMap.get(newKey.keynumber)) {
+    onFocus(keyMap.get(newKey.keynumber), "key")
   }; 
 
 }
@@ -588,7 +592,7 @@ function drawDivs() {
       const keyDiv: HTMLDivElement = document.createElement("div"); 
 
       //set its text
-      keyDiv.textContent = key.text; 
+      keyDiv.textContent = key.keytext; 
 
       //need to assign its position to be relative to its parent
       keyDiv.style.position = "absolute"; 
@@ -601,7 +605,7 @@ function drawDivs() {
       keyDiv.style.width = "60px"; 
 
       //set its key number
-      keyDiv.dataset.keyNumber = String(key.keyNumber); 
+      keyDiv.dataset.keynumber = String(key.keynumber); 
 
       keyDiv.classList.add("key"); 
 
@@ -609,6 +613,15 @@ function drawDivs() {
           event.stopPropagation(); 
           onFocus(keyDiv, "key")
         }); 
+
+      keyDiv.addEventListener("input", () => {
+          key.keytext = keyDiv.textContent ?? "";
+          if (selectedKey) {
+              selectedKey.keytext = key.keytext;
+              console.log("selectedKeyText: " + selectedKey.keytext);
+              console.log("keys:", JSON.stringify(keyArr, null, 2));
+          } 
+      });
 
       //append the container to its parent
       keyContainer.appendChild(keyDiv);
@@ -692,7 +705,7 @@ function deleteDiv(type: string) {
     commentMap.delete(id); 
 
     //get the index of the comment to delete. 
-    const index = commentArr.findIndex( comment => comment.commentNumber === id)
+    const index = commentArr.findIndex( comment => comment.commentnumber === id)
 
     //if index esists, delete the comment. 
     if (index !== -1) {
@@ -702,7 +715,7 @@ function deleteDiv(type: string) {
 
   if (type === "key") {
     //get the divs id
-    const id: number | undefined = Number(div.dataset.keyNumber); 
+    const id: number | undefined = Number(div.dataset.keynumber); 
 
     if (id === null) {
       alert("Must have a key selected!");
@@ -713,7 +726,7 @@ function deleteDiv(type: string) {
     keyMap.delete(id); 
 
     //get the index of the key to delete. 
-    const index = keyArr.findIndex( key => key.keyNumber === id)
+    const index = keyArr.findIndex( key => key.keynumber === id)
     //if index exists, delete the key. 
     if (index !== -1) {
       keyArr.splice(index, 1); 
@@ -754,7 +767,7 @@ function onFocus(div: HTMLDivElement | undefined, type: string): void {
 
   if (type === "comment") {
     const comment = commentArr.find(
-      comment => comment.commentNumber === Number(selectedDiv?.dataset.commentNumber)
+      comment => comment.commentnumber === Number(selectedDiv?.dataset.commentnumber)
     );
     if (comment) {
       selectedSection = undefined; 
@@ -763,7 +776,7 @@ function onFocus(div: HTMLDivElement | undefined, type: string): void {
     }
   }
   if (type === "key") {
-    const key = keyArr.find(key => key.keyNumber === Number(selectedDiv?.dataset.keyNumber)); 
+    const key = keyArr.find(key => key.keynumber === Number(selectedDiv?.dataset.keynumber)); 
     if (key) {
       selectedSection = undefined; 
       selectedComment = undefined;
@@ -888,10 +901,10 @@ function addComments(index: number): HTMLDivElement[] {
       newComment.style.left = `${position}%`; 
 
       //set the commentnumber into the comment
-      newComment.dataset.commentNumber = String(comment.commentNumber); 
+      newComment.dataset.commentnumber = String(comment.commentnumber); 
 
       //put the comment in the map
-      commentMap.set(comment.commentNumber, newComment); 
+      commentMap.set(comment.commentnumber, newComment); 
 
       //add the comment to the array
       comments.push(newComment); 
@@ -979,6 +992,7 @@ async function saveFcn(): Promise<void> {
     keys: keyArr,
     listenerType: listenerType  
   }
+  console.log("keys saving:", JSON.stringify(keyArr, null, 2));
 
   //if dbID is still undefined then we have yet to save once. 
 
@@ -998,7 +1012,7 @@ async function saveFcn(): Promise<void> {
     dbID = data.id; 
 
     const address: HTMLInputElement = document.getElementById("address") as HTMLInputElement
-    console.log("addres: " + `${window.location.origin}/${dbID}`);
+    console.log("address: " + `${window.location.origin}/${dbID}`);
     address.value = `${window.location.origin}/${dbID}`;
   } 
   else {

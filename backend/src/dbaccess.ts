@@ -148,10 +148,13 @@ export async function create(listen: ListeningMap): Promise<number> {
             )
         }
 
+        console.log("Keys being inserted:", JSON.stringify(keysArr, null, 2));
+        
         for (const keyObj of keysArr) {
-            let keyText: string | undefined = keyObj.text
-            if (keyObj.text === "key") keyText = "",
-            await connection.query("INSERT INTO mkeys (keynumber, mapid, startTIme, keyText) VALUES (?, ?, ? ,?)", 
+            let keyText: string | undefined = keyObj.text;
+            if (keyObj.text === "key") keyText = "";
+
+            await connection.query("INSERT INTO mkeys (keyNumber, mapid, startTime, keyText) VALUES (?, ?, ? ,?)", 
                 [
                     keyObj.keynumber,
                     id,
@@ -160,6 +163,7 @@ export async function create(listen: ListeningMap): Promise<number> {
                 ])
         }
 
+        console.log("Insert result:", result);
         await connection.commit();
 
         console.log(id);
@@ -238,10 +242,10 @@ export async function update(id: number, listen: ListeningMap): Promise<number> 
 
         for (const key of listen.keys) {
             await conn.query(
-                `INSERT INTO mkeys (mapid, keyNumber, startTime, keyText) VALUES (?, ?, ?, ?)`,
+                `INSERT INTO mkeys (keyNumber, mapid, startTime, keyText) VALUES (?, ?, ?, ?)`,
                 [
-                    id,
                     key.keynumber,
+                    id,
                     key.starttime,
                     key.text
                 ]

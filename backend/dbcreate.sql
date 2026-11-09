@@ -34,7 +34,7 @@ CREATE TABLE comments (
     commentNumber int not null,
     mapid int not null,
     PRIMARY KEY (mapid, commentnumber),
-    startTime decimal(8,2) NOT NULL, 
+    starttime decimal(8,2) NOT NULL, 
     lyrics varchar(2000),
     translation varchar(2000), 
     notes varchar(2000),
@@ -42,11 +42,11 @@ CREATE TABLE comments (
 );
 
 CREATE TABLE mkeys (
-    keyNumber INT NOT NULL,
+    keynumber INT NOT NULL,
     mapid int not null,
     PRIMARY KEY (keyNumber, mapid),
-    startTime decimal(8,2) not null,
-    keyText varchar(3),
+    starttime decimal(8,2) not null,
+    keytext varchar(3),
     FOREIGN KEY (mapid) references listeningMaps(pk)
 );
 

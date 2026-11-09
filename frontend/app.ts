@@ -1,6 +1,6 @@
 //imports
 import * as musicService from "./musicService.js";
-import { createAnnotations } from "./annotations.js"; 
+import { createAnnotations} from "./annotations.js"; 
 import { updateTrack } from "./trackInfo.js"
 import type { ListeningMap } from "./annotations.js"
 import "./hoverTimer.js"; 
@@ -33,7 +33,6 @@ const json: ListeningMap = await response.json();
 
 //apple music expects the trackid as a string funnily enough. 
 const songId: string = String(json.trackid); 
-
 
 console.log("json: " + json);
 

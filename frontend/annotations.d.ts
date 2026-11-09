@@ -12,16 +12,16 @@ export interface ListeningMap {
     listenerType: string;
 }
 export interface comment {
-    commentNumber: number;
+    commentnumber: number;
     starttime: number;
     lyrics?: string;
     translation?: string;
     notes?: string;
 }
 export interface key {
-    keyNumber: number;
+    keynumber: number;
     starttime: number;
-    text: string;
+    keytext: string;
 }
 export interface section {
     sectionnumber: number;
@@ -35,6 +35,8 @@ export interface section {
 }
 export declare function createAnnotations(request: ListeningMap): void;
 export declare function getAnnotations(): ListeningMap;
-export declare function getNotes(): string[];
-export declare function getEnds(): number[];
+export declare function getNotes(): {
+    text: string;
+    time: number;
+}[];
 //# sourceMappingURL=annotations.d.ts.map

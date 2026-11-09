@@ -6,6 +6,46 @@ html, body {
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; 
 }
 
+
+#keyBar {
+    position: relative;
+    margin-top: 2vh; 
+    background-color: gray;
+    height: auto; 
+}
+
+.key {
+    position: absolute;
+}
+
+.measure {
+    align-self: start;
+    color: white;
+    font-size: 1rem;
+    justify-self: start;
+    padding-left: .5vw; 
+    padding-top: .25vh; 
+}
+
+.section {
+    display: grid;
+    grid-template-rows: auto 1fr;
+}
+
+.sectionText {
+    place-self: center;
+    text-align: center;
+}
+
+.seek-success {
+    animation: seekHighlight 300ms ease-out;
+}
+
+@keyframes seekHighlight {
+    0% { background-color: #4a90e2; }
+    100% { background-color: transparent; }
+}
+
 #album {
     font-size: 1.25rem; 
     display: grid;
@@ -59,24 +99,27 @@ html, body {
     box-sizing: border-box; 
 }
 
+
+
 #notes {
     white-space: pre-wrap;
     display: grid; 
     font-size: 2rem; 
     margin: 0 0 0 calc(1.5vw + 36px);
     justify-content: center; 
+    min-height: 0; 
 }
 
 #pbContainer {
     display: grid; 
-    height: 100%; 
-    grid-template-rows: 20fr 65fr 10fr; 
+    min-height: 0; 
+    grid-template-rows: 5fr 20fr 1fr 74fr;
 }
 
 #playbackGrid{
     height: 100dvh; 
     display: grid;
-    grid-template-rows: minmax(0, 40fr) minmax(0, 60fr);
+    grid-template-rows: 90fr 10fr; 
 }
 
 #playButton {
@@ -108,7 +151,7 @@ html, body {
 #sections {
     display: grid;
     margin: 1vh 1vw 0 calc(1.5vw + 36px); 
-    height: 100%; 
+    height: auto; 
     border-radius: 1vw; 
     gap: 1px;
     place-items: center; 
@@ -126,11 +169,10 @@ html, body {
     width: 100%;
     height: 100%;  
     display: grid;
-    justify-content: center;
-    align-items: center;
     color: white; 
     font-size: 1.5rem; 
 }
+
 
 #timers {
     display: grid; 

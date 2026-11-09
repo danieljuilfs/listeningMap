@@ -85,17 +85,19 @@ export async function create(listen) {
                 comNotes
             ]);
         }
+        console.log("Keys being inserted:", JSON.stringify(keysArr, null, 2));
         for (const keyObj of keysArr) {
             let keyText = keyObj.text;
             if (keyObj.text === "key")
-                keyText = "",
-                    await connection.query("INSERT INTO mkeys (keynumber, mapid, startTIme, keyText) VALUES (?, ?, ? ,?)", [
-                        keyObj.keynumber,
-                        id,
-                        keyObj.starttime,
-                        keyText
-                    ]);
+                keyText = "";
+            await connection.query("INSERT INTO mkeys (keyNumber, mapid, startTime, keyText) VALUES (?, ?, ? ,?)", [
+                keyObj.keynumber,
+                id,
+                keyObj.starttime,
+                keyText
+            ]);
         }
+        console.log("Insert result:", result);
         await connection.commit();
         console.log(id);
         return id;
@@ -156,9 +158,9 @@ export async function update(id, listen) {
             ]);
         }
         for (const key of listen.keys) {
-            await conn.query(`INSERT INTO mkeys (mapid, keyNumber, startTime, keyText) VALUES (?, ?, ?, ?)`, [
-                id,
+            await conn.query(`INSERT INTO mkeys (keyNumber, mapid, startTime, keyText) VALUES (?, ?, ?, ?)`, [
                 key.keynumber,
+                id,
                 key.starttime,
                 key.text
             ]);

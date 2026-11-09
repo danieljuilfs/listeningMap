@@ -289,7 +289,7 @@ function createComment() {
     }
     //create the comment
     const newComment = {
-        commentNumber: commentId,
+        commentnumber: commentId,
         starttime: currentTime,
         lyrics: "Add Lyrics",
         translation: "Add Translation",
@@ -301,8 +301,8 @@ function createComment() {
     commentId++;
     drawDivs();
     //set the new comment to the focus. 
-    if (commentMap.get(newComment.commentNumber)) {
-        onFocus(commentMap.get(newComment.commentNumber), "comment");
+    if (commentMap.get(newComment.commentnumber)) {
+        onFocus(commentMap.get(newComment.commentnumber), "comment");
     }
     ;
 }
@@ -323,9 +323,9 @@ function createKey() {
     }
     //create the key
     const newKey = {
-        keyNumber: keyId,
+        keynumber: keyId,
         starttime: currentTime,
-        text: "key"
+        keytext: "key"
     };
     //add the key to the array. 
     keyArr.push(newKey);
@@ -333,8 +333,8 @@ function createKey() {
     keyId++;
     drawDivs();
     //set the new key to the focus. 
-    if (keyMap.get(newKey.keyNumber)) {
-        onFocus(keyMap.get(newKey.keyNumber), "key");
+    if (keyMap.get(newKey.keynumber)) {
+        onFocus(keyMap.get(newKey.keynumber), "key");
     }
     ;
 }
@@ -428,7 +428,7 @@ function drawDivs() {
         //create the div to hold the key
         const keyDiv = document.createElement("div");
         //set its text
-        keyDiv.textContent = key.text;
+        keyDiv.textContent = key.keytext;
         //need to assign its position to be relative to its parent
         keyDiv.style.position = "absolute";
         keyDiv.style.left = `${left}%`;
@@ -437,11 +437,19 @@ function drawDivs() {
         //set its width
         keyDiv.style.width = "60px";
         //set its key number
-        keyDiv.dataset.keyNumber = String(key.keyNumber);
+        keyDiv.dataset.keynumber = String(key.keynumber);
         keyDiv.classList.add("key");
         keyDiv.addEventListener("click", (event) => {
             event.stopPropagation();
             onFocus(keyDiv, "key");
+        });
+        keyDiv.addEventListener("input", () => {
+            key.keytext = keyDiv.textContent ?? "";
+            if (selectedKey) {
+                selectedKey.keytext = key.keytext;
+                console.log("selectedKeyText: " + selectedKey.keytext);
+                console.log("keys:", JSON.stringify(keyArr, null, 2));
+            }
         });
         //append the container to its parent
         keyContainer.appendChild(keyDiv);
@@ -507,7 +515,7 @@ function deleteDiv(type) {
         //delete the comment from the map of divs
         commentMap.delete(id);
         //get the index of the comment to delete. 
-        const index = commentArr.findIndex(comment => comment.commentNumber === id);
+        const index = commentArr.findIndex(comment => comment.commentnumber === id);
         //if index esists, delete the comment. 
         if (index !== -1) {
             commentArr.splice(index, 1);
@@ -515,7 +523,7 @@ function deleteDiv(type) {
     }
     if (type === "key") {
         //get the divs id
-        const id = Number(div.dataset.keyNumber);
+        const id = Number(div.dataset.keynumber);
         if (id === null) {
             alert("Must have a key selected!");
             return;
@@ -523,7 +531,7 @@ function deleteDiv(type) {
         //delete the key from the map of divs
         keyMap.delete(id);
         //get the index of the key to delete. 
-        const index = keyArr.findIndex(key => key.keyNumber === id);
+        const index = keyArr.findIndex(key => key.keynumber === id);
         //if index exists, delete the key. 
         if (index !== -1) {
             keyArr.splice(index, 1);
@@ -554,7 +562,7 @@ function onFocus(div, type) {
         }
     }
     if (type === "comment") {
-        const comment = commentArr.find(comment => comment.commentNumber === Number(selectedDiv?.dataset.commentNumber));
+        const comment = commentArr.find(comment => comment.commentnumber === Number(selectedDiv?.dataset.commentnumber));
         if (comment) {
             selectedSection = undefined;
             selectedComment = comment;
@@ -562,7 +570,7 @@ function onFocus(div, type) {
         }
     }
     if (type === "key") {
-        const key = keyArr.find(key => key.keyNumber === Number(selectedDiv?.dataset.keyNumber));
+        const key = keyArr.find(key => key.keynumber === Number(selectedDiv?.dataset.keynumber));
         if (key) {
             selectedSection = undefined;
             selectedComment = undefined;
@@ -662,9 +670,9 @@ function addComments(index) {
             //set the comments position
             newComment.style.left = `${position}%`;
             //set the commentnumber into the comment
-            newComment.dataset.commentNumber = String(comment.commentNumber);
+            newComment.dataset.commentnumber = String(comment.commentnumber);
             //put the comment in the map
-            commentMap.set(comment.commentNumber, newComment);
+            commentMap.set(comment.commentnumber, newComment);
             //add the comment to the array
             comments.push(newComment);
         }
@@ -728,6 +736,7 @@ async function saveFcn() {
         keys: keyArr,
         listenerType: listenerType
     };
+    console.log("keys saving:", JSON.stringify(keyArr, null, 2));
     //if dbID is still undefined then we have yet to save once. 
     if (dbID === undefined) {
         const response = await fetch("http://localhost:3001/annotations/", {
@@ -742,7 +751,7 @@ async function saveFcn() {
         savedListener = structuredClone(listeningMap);
         dbID = data.id;
         const address = document.getElementById("address");
-        console.log("addres: " + `${window.location.origin}/${dbID}`);
+        console.log("address: " + `${window.location.origin}/${dbID}`);
         address.value = `${window.location.origin}/${dbID}`;
     }
     else {
