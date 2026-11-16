@@ -7,7 +7,7 @@ import { updateBar } from "./slider.js"
 let counter: number = 0; 
 
 //get the notes
-let notes:  { text: string; time: number }[] ; 
+let notes:  { note: string; lyrics: string; time: number }[] ; 
 
 let nextTime: number; 
 
@@ -17,9 +17,9 @@ export function updateTrack(): void {
   const annotations: ListeningMap = getAnnotations(); 
 
   notes = getNotes(); 
-  
-  nextTime = notes[counter]?.time!;
 
+  nextTime = notes[counter+1]?.time!;
+  console.log("nextTime start: " + nextTime); 
   //get the div element that stores the track information. 
   const trackname: HTMLDivElement = document.getElementById("trackName") as HTMLDivElement;
 
@@ -71,8 +71,10 @@ export function updateProgress(): void {
 
  //the breakpoint has been passed, check 
  if (curTime > nextTime ) {
+
     counter++; 
-    nextTime = notes[counter]?.time!; 
+
+    nextTime = notes[counter+1]?.time!;
 
     //need to handle playback state updates where someone jumps ahead in the bar. 
     while (curTime > nextTime) {
@@ -80,18 +82,23 @@ export function updateProgress(): void {
       nextTime = notes[counter]?.time!; 
     }
 
-    noteDiv.textContent = notes[counter]?.text!;
+    noteDiv.textContent = notes[counter]?.note!;
  }
   //need to handle playbackstates where someone jumps backwards in the bar. 
-  else if (counter > 0 && curTime < notes[counter-1]?.time!) {
+  else if (counter > 0 && curTime < notes[counter]?.time!) {
+    //decrement the counter and update the next note
     counter--;
-    nextTime = notes[counter]?.time!;
+    nextTime = notes[counter+1]?.time!;
 
-    while (curTime< notes[counter-1]?.time!) {
+    //if the curTime lower than the time on current notes, we need to decrement until its not
+    while (curTime < notes[counter]?.time!) {
+      
         counter--;
-        nextTime = notes[counter]?.time!;
+        nextTime = notes[counter+1]?.time!;
     }
 
-    noteDiv.textContent = notes[counter]?.text!;
+    noteDiv.textContent = notes[counter]?.note!;
     }
+
+  
   }

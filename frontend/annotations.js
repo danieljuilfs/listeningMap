@@ -4,7 +4,6 @@ let annotations;
 const notes = [];
 export function createAnnotations(request) {
     annotations = request;
-    console.log("Annotations: ", annotations);
     //holds the column titles for the sections
     const columns = [];
     //get the div element that stores the track information. 
@@ -17,7 +16,6 @@ export function createAnnotations(request) {
         //create the measure div, set its text, append it to the parent
         let measureDiv = document.createElement("div");
         measureDiv.textContent = curSection.measure;
-        console.log("measure:" + curSection.measure);
         measureDiv.classList.add("measure");
         parentDiv.append(measureDiv);
         //create the childDiv, set its text, append it to the parent
@@ -41,15 +39,31 @@ export function createAnnotations(request) {
         columns.push(`${duration}fr`);
         //if the note isn't null, push it to the array, otherwise push an empty string. 
         notes.push({
-            text: curSection.notes ?? "",
-            time: curSection.endtime
+            note: curSection.notes ?? "",
+            lyrics: curSection.lyrics ?? "",
+            time: curSection.starttime
         });
     }
+    //iterate over the comments, add each to the notes section, then sort it. 
+    //get the comments
+    const comments = request.comments;
+    //iterate over the comments add each to the notes array
+    comments.forEach((com) => {
+        if (com.notes || com.lyrics) {
+            notes.push({
+                note: com.notes ?? "",
+                lyrics: com.lyrics ?? "",
+                time: com.starttime
+            });
+        }
+    });
+    //sort the notes array. after shoving in all the comments
+    notes.sort((a, b) => a.time - b.time);
     //set the width based on the size of each container
     sectionDiv.style.gridTemplateColumns = columns.join(" ");
     //set the starting text for note div. 
     const noteDiv = document.getElementById("notes");
-    noteDiv.textContent = notes[0]?.text;
+    noteDiv.textContent = notes[0]?.note;
     //get the key bar
     const keyBar = document.getElementById("keyBar");
     //iterate over the keys, getting each and putting them in a div. 

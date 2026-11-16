@@ -36,7 +36,8 @@ export interface section {
 export declare function createAnnotations(request: ListeningMap): void;
 export declare function getAnnotations(): ListeningMap;
 export declare function getNotes(): {
-    text: string;
+    note: string;
+    lyrics: string;
     time: number;
 }[];
 //# sourceMappingURL=annotations.d.ts.map

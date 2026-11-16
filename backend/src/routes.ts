@@ -27,8 +27,6 @@ router.get("/:id", async(req, res) => {
 
 router.post("/", async(req,res) => {
     const body: ListeningMap = req.body; 
-    //console.log("POST / received");
-    //console.log("Request body:", req.body);
 
     console.log({
     bodyType: typeof body,

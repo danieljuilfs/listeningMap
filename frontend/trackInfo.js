@@ -10,7 +10,8 @@ let nextTime;
 export function updateTrack() {
     const annotations = getAnnotations();
     notes = getNotes();
-    nextTime = notes[counter]?.time;
+    nextTime = notes[counter + 1]?.time;
+    console.log("nextTime start: " + nextTime);
     //get the div element that stores the track information. 
     const trackname = document.getElementById("trackName");
     //get the composer div so we can set the composer
@@ -47,23 +48,25 @@ export function updateProgress() {
     //the breakpoint has been passed, check 
     if (curTime > nextTime) {
         counter++;
-        nextTime = notes[counter]?.time;
+        nextTime = notes[counter + 1]?.time;
         //need to handle playback state updates where someone jumps ahead in the bar. 
         while (curTime > nextTime) {
             counter++;
             nextTime = notes[counter]?.time;
         }
-        noteDiv.textContent = notes[counter]?.text;
+        noteDiv.textContent = notes[counter]?.note;
     }
     //need to handle playbackstates where someone jumps backwards in the bar. 
-    else if (counter > 0 && curTime < notes[counter - 1]?.time) {
+    else if (counter > 0 && curTime < notes[counter]?.time) {
+        //decrement the counter and update the next note
         counter--;
-        nextTime = notes[counter]?.time;
-        while (curTime < notes[counter - 1]?.time) {
+        nextTime = notes[counter + 1]?.time;
+        //if the curTime lower than the time on current notes, we need to decrement until its not
+        while (curTime < notes[counter]?.time) {
             counter--;
-            nextTime = notes[counter]?.time;
+            nextTime = notes[counter + 1]?.time;
         }
-        noteDiv.textContent = notes[counter]?.text;
+        noteDiv.textContent = notes[counter]?.note;
     }
 }
 //# sourceMappingURL=trackInfo.js.map

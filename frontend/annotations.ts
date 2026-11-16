@@ -44,14 +44,11 @@ export interface section {
 let annotations: ListeningMap; 
 
 //holds the notes for the sections
-const notes: { text: string; time: number }[] = [];
-
+const notes: { note: string; lyrics: string;  time: number }[] = [];
 
 export function createAnnotations(request: ListeningMap) {
 
   annotations = request; 
-
-  console.log("Annotations: ", annotations); 
 
   //holds the column titles for the sections
   const columns: string[] = []; 
@@ -68,7 +65,6 @@ export function createAnnotations(request: ListeningMap) {
     //create the measure div, set its text, append it to the parent
     let measureDiv: HTMLDivElement = document.createElement("div"); 
     measureDiv.textContent = curSection.measure; 
-    console.log("measure:" + curSection.measure); 
     measureDiv.classList.add("measure"); 
     parentDiv.append(measureDiv);
 
@@ -99,10 +95,30 @@ export function createAnnotations(request: ListeningMap) {
 
     //if the note isn't null, push it to the array, otherwise push an empty string. 
     notes.push({
-        text: curSection.notes ?? "",
-        time: curSection.endtime
+        note: curSection.notes ?? "",
+        lyrics: curSection.lyrics ?? "",
+        time: curSection.starttime
     });
   }
+
+  //iterate over the comments, add each to the notes section, then sort it. 
+
+  //get the comments
+  const comments = request.comments; 
+
+  //iterate over the comments add each to the notes array
+  comments.forEach((com: comment) => {
+    if (com.notes || com.lyrics){
+      notes.push({
+        note: com.notes ?? "", 
+        lyrics: com.lyrics ?? "", 
+        time: com.starttime
+      }); 
+    }
+  });
+
+  //sort the notes array. after shoving in all the comments
+  notes.sort((a, b) => a.time - b.time ); 
 
   //set the width based on the size of each container
   sectionDiv.style.gridTemplateColumns = columns.join(" "); 
@@ -110,9 +126,7 @@ export function createAnnotations(request: ListeningMap) {
   //set the starting text for note div. 
   const noteDiv: HTMLDivElement = document.getElementById("notes") as HTMLDivElement; 
 
-  noteDiv.textContent = notes[0]?.text!;
-
-
+  noteDiv.textContent = notes[0]?.note!;
 
   //get the key bar
   const keyBar: HTMLDivElement = document.getElementById("keyBar") as HTMLDivElement; 
@@ -137,7 +151,7 @@ export function getAnnotations(): ListeningMap {
   return annotations; 
 }
 
-export function getNotes() :  { text: string; time: number }[] {
+export function getNotes() :  { note: string; lyrics: string,  time: number }[] {
   return notes; 
 }
 

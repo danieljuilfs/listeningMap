@@ -81,5 +81,3 @@ function movePlayback(click: MouseEvent): void {
     interval = undefined; 
     selectTime(click); 
 }
-
-
