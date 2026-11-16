@@ -19,9 +19,7 @@ export function updateTrack() {
     const album = document.getElementById("album");
     //set the track name
     trackname.textContent = annotations.title;
-    //set the album name
-    album.textContent = "Album: " + annotations.album;
-    album.href = annotations.uri;
+    trackname.href = annotations.uri;
     //get the composer from the attributes section. 
     const composer = annotations.composer;
     //if there is a composer set the composer in the heading
@@ -48,7 +46,9 @@ export function updateProgress() {
     //the breakpoint has been passed, check 
     if (curTime > nextTime) {
         counter++;
-        nextTime = notes[counter + 1]?.time;
+        const nextNotes = notes[counter + 1]?.time;
+        if (nextNotes)
+            nextTime = nextNotes;
         //need to handle playback state updates where someone jumps ahead in the bar. 
         while (curTime > nextTime) {
             counter++;

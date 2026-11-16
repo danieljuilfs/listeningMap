@@ -201,6 +201,9 @@ html, body {
 
 #trackName {
     font-size: 1.5rem; 
+    font-style: italic; 
+    color: inherit; 
+    text-decoration: underline dotted; 
 }
 
 #rotateWarning {

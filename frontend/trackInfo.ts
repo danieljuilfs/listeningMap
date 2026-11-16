@@ -21,7 +21,7 @@ export function updateTrack(): void {
   nextTime = notes[counter+1]?.time!;
   console.log("nextTime start: " + nextTime); 
   //get the div element that stores the track information. 
-  const trackname: HTMLDivElement = document.getElementById("trackName") as HTMLDivElement;
+  const trackname: HTMLLinkElement = document.getElementById("trackName") as HTMLLinkElement;
 
   //get the composer div so we can set the composer
   const header: HTMLHeadingElement= document.getElementById("composer") as HTMLHeadingElement; 
@@ -30,10 +30,7 @@ export function updateTrack(): void {
  
   //set the track name
   trackname.textContent = annotations.title;  
-
-  //set the album name
-  album.textContent = "Album: " + annotations.album; 
-  album.href = annotations.uri; 
+  trackname.href = annotations.uri; 
 
   //get the composer from the attributes section. 
   const composer: string = annotations.composer; 
@@ -74,7 +71,8 @@ export function updateProgress(): void {
 
     counter++; 
 
-    nextTime = notes[counter+1]?.time!;
+    const nextNotes: number = notes[counter+1]?.time!
+    if (nextNotes) nextTime = nextNotes;
 
     //need to handle playback state updates where someone jumps ahead in the bar. 
     while (curTime > nextTime) {
